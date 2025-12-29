@@ -1,0 +1,10 @@
+# Backend
+/backend/vendor
+/backend/.env
+
+# Frontend
+/frontend/node_modules
+/frontend/.expo
+
+# Geral
+.DS_Store
