@@ -1,6 +1,17 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
-  }
+    "strict": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "src/*": ["src/*"]
+    },
+
+    "types": ["react", "react-native"],
+
+    "skipLibCheck": true
+  },
+  "include": ["src", "metro.config.js"],
+  "exclude": ["node_modules", "babel.config.js", "node_modules/**"]
 }
