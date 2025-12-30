@@ -4,35 +4,42 @@ import { Button } from 'react-native-paper'
 import BackgroundWaves from 'src/components/BackgroundWaves'
 import Link from 'src/components/Link'
 import FormInput from 'src/components/FormInput'
+import { KeyboardDismissView } from 'src/components/KeyboardDismissView'
+
+
+
 
 export default function Login() {
     return (
-        <View style={styles.container}>
-            <BackgroundWaves />
+        <KeyboardDismissView>
+            <View style={styles.container}>
+                <BackgroundWaves />
 
-            <View style={styles.content}>
-                <FormInput
-                    label="Email"
-                    placeholder="Insira seu email"
-                />
+                <View style={styles.content}>
+                    <FormInput
+                        label="Email"
+                        placeholder="Insira seu email"
+                    />
 
-                <FormInput
-                    label="Senha"
-                    placeholder="Insira sua senha"
-                    secureTextEntry
-                />
-                <Link titulo="Esqueceu a senha?" />
+                    <FormInput
+                        label="Senha"
+                        placeholder="Insira sua senha"
+                        secureTextEntry
+                    />
+                    <Link titulo="Esqueceu a senha?" />
 
-                <Button
-                    mode="contained"
-                    onPress={() => { }}
-                    style={styles.button}
-                    contentStyle={{ height: 48 }}
-                >
-                    Login
-                </Button>
+                    <Button
+                        mode="contained"
+                        onPress={() => { }}
+                        style={styles.button}
+                        contentStyle={{ height: 48 }}
+                    >
+                        Login
+                    </Button>
+                </View>
             </View>
-        </View>
+       </KeyboardDismissView>
+
     )
 }
 const styles = StyleSheet.create({
