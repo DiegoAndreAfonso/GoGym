@@ -1,60 +1,212 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
-import { Button } from 'react-native-paper'
 import BackgroundWaves from 'src/components/BackgroundWaves'
-import Link from 'src/components/Link'
-import FormInput from 'src/components/FormInput'
+import Link from '@/components/Form/Link'
+import FormInput from '@/components/Form/FormInput'
 import { KeyboardDismissView } from 'src/components/KeyboardDismissView'
-
-
-
+import SocialButton from 'src/components/SocialButtons'
+import AuthHeader from 'src/components/AuthHeader'
+import { Typography } from 'src/components/Typography'
+import FormButton from '@/components/Form/FormButton'
+import { useTheme } from '@/context/ThemeContext'
+import { useState } from 'react'
+import LoginFooter from '@/components/LoginFooter'
+import { lightTheme, darkTheme } from '@/@types/colors'
 
 export default function Login() {
+    const theme = darkTheme
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [rememberMe, setRememberMe] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+    const handleLogin = async () => {
+        setLoading(true)
+        setTimeout(() => {
+            setLoading(false)
+            console.log('Login realizado com:', { email, password, rememberMe })
+        }, 1500)
+    }
+
+    const handleForgotPassword = () => {
+        console.log('Esqueci a senha')
+    }
+
     return (
         <KeyboardDismissView>
-            <View style={styles.container}>
-                <BackgroundWaves />
+            <View style={[styles.container, { backgroundColor: theme.background }]}>
+                <BackgroundWaves theme={theme.waves} />
 
-                <View style={styles.content}>
-                    <FormInput
-                        label="Email"
-                        placeholder="Insira seu email"
-                    />
+                <View style={styles.scrollContent}>
+                    <View style={styles.centerContainer}>
+                        <View style={styles.header}>
+                            <AuthHeader
+                                title="Faça parte dessa comunidade"
+                                theme={theme}
+                            />
+                        </View>
 
-                    <FormInput
-                        label="Senha"
-                        placeholder="Insira sua senha"
-                        secureTextEntry
-                    />
-                    <Link titulo="Esqueceu a senha?" />
+                        <View style={styles.form}>
+                            <FormInput
+                                label="Email"
+                                placeholder="digite@email.com"
+                                theme={theme}
+                                variant="transparent"
+                                value={email}
+                                onChangeText={setEmail}
+                            />
 
-                    <Button
-                        mode="contained"
-                        onPress={() => { }}
-                        style={styles.button}
-                        contentStyle={{ height: 48 }}
-                    >
-                        Login
-                    </Button>
+                            <FormInput
+                                label="Senha"
+                                placeholder="Sua senha"
+                                secureTextEntry
+                                theme={theme}
+                                variant="transparent"
+                                value={password}
+                                onChangeText={setPassword}
+                            />
+
+                            <LoginFooter
+                                theme={theme}
+                                rememberMeChecked={rememberMe}
+                                onRememberMeToggle={setRememberMe}
+                                onForgotPasswordPress={handleForgotPassword}
+                            />
+                        </View>
+
+                        <View style={styles.buttonContainer}>
+                            <FormButton
+                                title="Entrar"
+                                onPress={handleLogin}
+                                theme={theme}
+                                variant="contained"
+                                loading={loading}
+                                disabled={!email || !password}
+                                fullWidth
+                                size="large"
+                            />
+                        </View>
+
+                        <View style={styles.registerLink}>
+                            <Typography
+                                variant="bodyMedium"
+                                style={{ color: theme.text.secondary }}
+                            >
+                                Não tem uma conta?
+                            </Typography>
+                            <Link
+                                titulo="Cadastrar"
+                                theme={theme}
+                            />
+                        </View>
+
+                        <View style={styles.dividerContainer}>
+                            <View style={[styles.dividerLine, { backgroundColor: theme.input.border }]} />
+                            <Typography
+                                variant="bodySmall"
+                                style={[styles.dividerText, { color: theme.text.secondary }]}
+                            >
+                                ou
+                            </Typography>
+                            <View style={[styles.dividerLine, { backgroundColor: theme.input.border }]} />
+                        </View>
+
+                        <View style={styles.socialSection}>
+                            <Typography
+                                variant="bodyMedium"
+                                style={[styles.socialTitle, { color: theme.text.secondary }]}
+                            >
+                                Conecte-se de outras formas
+                            </Typography>
+
+                            <View style={styles.socialButtonsContainer}>
+                                <SocialButton
+                                    variant="facebook"
+                                    theme={theme}
+                                    source={require('src/assets/facebook.png')}
+                                />
+                                <SocialButton
+                                    variant="google"
+                                    theme={theme}
+                                    source={require('src/assets/google.png')}
+                                />
+                                <SocialButton
+                                    variant="instagram"
+                                    theme={theme}
+                                    source={require('src/assets/instagram.png')}
+                                />
+                            </View>
+                        </View>
+                    </View>
                 </View>
             </View>
-       </KeyboardDismissView>
-
+        </KeyboardDismissView>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    content: {
-        flex: 1,
+    scrollContent: {
+        flexGrow: 1,
         justifyContent: 'center',
         paddingHorizontal: 24,
-        gap: 16,
+        paddingVertical: 400,
     },
-
-    button: {
-        marginTop: 8,
-        borderRadius: 10,
+    centerContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 25,
+    },
+    header: {
+        alignItems: 'center',
+        marginBottom: 10,
+    },
+    form: {
+        width: '100%',
+        gap: 16,
+        marginBottom: 10,
+    },
+    buttonContainer: {
+        width: '100%',
+        marginTop: 25,
+        marginBottom: 15,
+    },
+    registerLink: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 8,
+        marginBottom: 0,
+    },
+    dividerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+        marginVertical: 5,
+    },
+    dividerLine: {
+        flex: 1,
+        height: 1,
+        opacity: 0.5,
+    },
+    dividerText: {
+        marginHorizontal: 15,
+        fontSize: 14,
+    },
+    socialSection: {
+        alignItems: 'center',
+        width: '100%',
+        marginTop: 10,
+    },
+    socialTitle: {
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    socialButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 20,
+        width: '100%',
     },
 })
