@@ -1,4 +1,3 @@
-// src/components/LoginFooter/LoginFooter.tsx
 import React from 'react'
 import { View, StyleSheet, StyleProp, ViewStyle } from 'react-native'
 import { AppTheme } from 'src/@types/colors'
@@ -68,7 +67,6 @@ const styles = StyleSheet.create({
   },
 })
 
-// Versão simplificada
 export function LoginFooterSimple({
   theme,
   onForgotPasswordPress,

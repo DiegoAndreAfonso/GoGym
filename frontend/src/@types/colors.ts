@@ -164,7 +164,19 @@ export type AppTheme = {
     instagram: SocialColors
   };
   typography?: TypographyColors;
+  success: string
+  error: string
+  warning: string
+  info: string
+  onPrimary?: string 
+
+  states: {
+    focus: string
+    hover: string
+    active: string
+  }
 }
+
 export const darkTheme: AppTheme = {
   background: '#260635ff',
   waves: darkWaveTheme,
@@ -203,6 +215,16 @@ export const darkTheme: AppTheme = {
     secondary: '#ffffffcc',
     disabled: '#ffffff55',
   }),
+  success: '#4CAF50', 
+  error: '#F44336',   
+  warning: '#FF9800', 
+  info: '#2196F3',    
+  onPrimary: '#ffffff' ,
+  states: {
+    focus: '#4CAF50',
+    hover: '#3F51B5',
+    active: '#2196F3'
+  }
 };
 
 export const lightTheme: AppTheme = {
@@ -237,20 +259,28 @@ export const lightTheme: AppTheme = {
       border: '#d6249f',
       iconBackground: '#ffffff',
     },
+    
   },
   typography: createTypographyColors({
     primary: '#2a0f3c',
     secondary: '#4a2c5a',
     disabled: '#a8a1ad',
   }),
+  success: '#388E3C', 
+  error: '#D32F2F',   
+  warning: '#F57C00', 
+  info: '#1976D2',    
+  onPrimary: '#ffffff' ,
+  states: {
+    focus: '#4CAF50',
+    hover: '#3F51B5',
+    active: '#2196F3'
+  }
 };
-
 
 export const deuteranopiaTheme: AppTheme = {
   background: '#1b1b3a',
-
   waves: deuteranopiaWaveTheme,
-
   text: {
     primary: '#ffffff',
     secondary: '#d6d6ff',
@@ -258,7 +288,6 @@ export const deuteranopiaTheme: AppTheme = {
     placeholder: '#b3b3ff',
     disabled: '#8a8ab3',
   },
-
   input: {
     border: '#6c6cff',
     text: '#ffffff',
@@ -282,13 +311,21 @@ export const deuteranopiaTheme: AppTheme = {
       iconBackground: '#ffffff',
     },
   },
-}
+  success: '#66BB6A', 
+  error: '#EF5350',   
+  warning: '#FFA726', 
+  info: '#42A5F5',    
+  onPrimary: '#ffffff',
+  states: {
+    focus: '#4CAF50',
+    hover: '#3F51B5',
+    active: '#2196F3'
+  }
+};
 
 export const protanopiaTheme: AppTheme = {
   background: '#102a43',
-
   waves: protanopiaWaveTheme,
-
   text: {
     primary: '#ffffff',
     secondary: '#cce4f6',
@@ -296,7 +333,6 @@ export const protanopiaTheme: AppTheme = {
     placeholder: '#a5c9e3',
     disabled: '#7fa7c4',
   },
-
   input: {
     border: '#4dabf7',
     text: '#ffffff',
@@ -320,13 +356,21 @@ export const protanopiaTheme: AppTheme = {
       iconBackground: '#ffffff',
     },
   },
-}
+  success: '#4DB6AC', 
+  error: '#E57373',   
+  warning: '#FFB74D', 
+  info: '#64B5F6',    
+  onPrimary: '#ffffff',
+  states: {
+    focus: '#4CAF50',
+    hover: '#3F51B5',
+    active: '#2196F3'
+  }
+};
 
 export const tritanopiaTheme: AppTheme = {
   background: '#2a0f3c',
-
   waves: tritanopiaWaveTheme,
-
   text: {
     primary: '#ffffff',
     secondary: '#f0d9ff',
@@ -334,7 +378,6 @@ export const tritanopiaTheme: AppTheme = {
     placeholder: '#e0b3ff',
     disabled: '#b58fd1',
   },
-
   input: {
     border: '#d48cff',
     text: '#ffffff',
@@ -358,7 +401,17 @@ export const tritanopiaTheme: AppTheme = {
       iconBackground: '#ffffff',
     },
   },
-}
+  success: '#81C784', 
+  error: '#E57373',   
+  warning: '#FFD54F', 
+  info: '#7986CB',    
+  onPrimary: '#ffffff',
+  states: {
+    focus: '#4CAF50',
+    hover: '#3F51B5',
+    active: '#2196F3'
+  }
+};
 
 
 
