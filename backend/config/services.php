@@ -34,5 +34,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'notification' => [
+        'api_url' => env('NOTIFICATION_API_URL', 'https://api.notificacoes.com/v1'),
+        'enabled' => env('NOTIFICATION_API_ENABLED', true),
+        'timeout' => env('NOTIFICATION_API_TIMEOUT', 5),
+        'retry_attempts' => env('NOTIFICATION_API_RETRY_ATTEMPTS', 2),
+    ],
 
 ];
