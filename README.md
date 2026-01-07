@@ -109,10 +109,10 @@
     npm expo start  
 
 
-### Escaneie o QR Code com:
-### - Expo Go App (disponível nas app stores)
-### - Ou pressione:
-###   • 'w' para web
+    Escaneie o QR Code com:
+    - Expo Go App (disponível nas app stores)
+    - Ou pressione:
+    • 'w' para web
 
 # Comandos Úteis
 ## Backend (Laravel)
