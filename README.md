@@ -100,7 +100,7 @@
 ### Execute o servidor Laravel
     php artisan serve
 
-## Passo 2: Inicie o Frontend Web
+## Passo 2: Inicie o Frontend 
 
 ### Em outro terminal, na pasta frontend/
     cd frontend
