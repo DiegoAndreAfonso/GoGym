@@ -1,20 +1,32 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from 'react-native';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { ThemeProvider } from './src/context/ThemeContext';
+import { useFonts } from './src/hooks/useFonts';
+import { ToastContextProvider } from './src/context/ToastContext'
+
+import 'react-native-gesture-handler';
+
+import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
+  const { fontsLoaded } = useFonts();
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ToastContextProvider>
+      <ThemeProvider>
+        <PaperProvider>
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+          <AppNavigator />
+        </PaperProvider>
+      </ThemeProvider>
+    </ToastContextProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
