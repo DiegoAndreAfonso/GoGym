@@ -14,6 +14,14 @@ class AuthService
             throw new UnauthorizedHttpException('', 'Credenciais inválidas');
         }
 
+        if (!$user->hasVerifiedEmail()) {
+            throw new UnauthorizedHttpException('', 'Email não verificado. Verifique seu email.');
+        }
+
+        if (!$user->is_active) {
+            throw new UnauthorizedHttpException('', 'Conta inativa. Entre em contato com o suporte.');
+        }
+
         $user->tokens()
             ->where('name', 'mobile')
             ->delete();

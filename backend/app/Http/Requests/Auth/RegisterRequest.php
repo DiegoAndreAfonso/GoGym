@@ -14,5 +14,11 @@ class RegisterRequest extends FormRequest
             'password' => 'required|min:6'
         ];
     }
+    public function messages(): array
+    {
+        return [
+            'password.confirmed' => 'A confirmação de senha não corresponde'
+        ];
+    }
 }
 
