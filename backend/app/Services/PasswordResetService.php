@@ -11,16 +11,13 @@ use Illuminate\Support\Str;
 
 class PasswordResetService
 {
-    /**
-     * Envia código de recuperação para o email
-     */
+    
     public function sendResetCode(string $email): array
     {
         $user = User::where('email', $email)->first();
 
-        // Sempre retornar mesmo resultado por segurança
         if (!$user) {
-            Log::info('📧 Tentativa de recuperação para email não cadastrado', [
+            Log::info('Tentativa de recuperação para email não cadastrado', [
                 'email' => $email,
                 'ip' => request()->ip()
             ]);
@@ -32,9 +29,8 @@ class PasswordResetService
             ];
         }
 
-        // Rate limiting: máximo 3 tentativas em 15 minutos
         if ($this->hasTooManyAttempts($user)) {
-            Log::warning('⚠️ Muitas tentativas de recuperação de senha', [
+            Log::warning(' Muitas tentativas de recuperação de senha', [
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'ip' => request()->ip()
@@ -48,10 +44,8 @@ class PasswordResetService
             ];
         }
 
-        // Gerar código único
         $code = $this->generateUniqueCode($user->email);
         
-        // Salvar código
         DB::table('password_reset_codes')->updateOrInsert(
             ['email' => $user->email],
             [
@@ -66,14 +60,12 @@ class PasswordResetService
             ]
         );
 
-        // Enviar email
         $emailSent = $this->sendResetEmail($user, $code);
         
         if ($emailSent) {
-            Log::info('✅ Código de recuperação enviado', [
+            Log::info('Código de recuperação enviado', [
                 'user_id' => $user->id,
                 'email' => $user->email
-                // Não logar o código por segurança
             ]);
         }
 
@@ -85,9 +77,7 @@ class PasswordResetService
         ];
     }
 
-    /**
-     * Verifica se o código é válido
-     */
+   
     public function verifyCode(string $email, string $code): array
     {
         $record = DB::table('password_reset_codes')
@@ -97,7 +87,7 @@ class PasswordResetService
             ->first();
 
         if (!$record) {
-            Log::warning('❌ Tentativa de código inválido', [
+            Log::warning('Tentativa de código inválido', [
                 'email' => $email,
                 'code' => $code,
                 'ip' => request()->ip()
@@ -109,13 +99,12 @@ class PasswordResetService
             ];
         }
 
-        // Incrementar tentativas
         DB::table('password_reset_codes')
             ->where('email', $email)
             ->where('code', $code)
             ->increment('attempts');
 
-        Log::info('✅ Código de recuperação verificado', [
+        Log::info('Código de recuperação verificado', [
             'email' => $email,
             'code_valid' => true
         ]);
@@ -128,12 +117,9 @@ class PasswordResetService
         ];
     }
 
-    /**
-     * Reseta a senha do usuário
-     */
+
     public function resetPassword(string $email, string $code, string $token, string $newPassword): array
     {
-        // Verificar com token adicional para mais segurança
         $record = DB::table('password_reset_codes')
             ->where('email', $email)
             ->where('code', $code)
@@ -142,7 +128,7 @@ class PasswordResetService
             ->first();
 
         if (!$record) {
-            Log::error('❌ Tentativa de reset com dados inválidos', [
+            Log::error('Tentativa de reset com dados inválidos', [
                 'email' => $email,
                 'ip' => request()->ip()
             ]);
@@ -153,9 +139,8 @@ class PasswordResetService
             ];
         }
 
-        // Verificar se excedeu tentativas
         if ($record->attempts >= 5) {
-            Log::alert('🚨 Muitas tentativas de verificação de código', [
+            Log::alert('Muitas tentativas de verificação de código', [
                 'email' => $email,
                 'attempts' => $record->attempts,
                 'ip' => request()->ip()
@@ -169,7 +154,6 @@ class PasswordResetService
             ];
         }
 
-        // Buscar usuário
         $user = User::where('email', $email)->first();
         
         if (!$user) {
@@ -179,9 +163,8 @@ class PasswordResetService
             ];
         }
 
-        // Verificar se nova senha é igual à antiga
         if (Hash::check($newPassword, $user->password)) {
-            Log::info('⚠️ Tentativa de usar senha antiga', [
+            Log::info(' Tentativa de usar senha antiga', [
                 'user_id' => $user->id,
                 'email' => $email
             ]);
@@ -192,18 +175,15 @@ class PasswordResetService
             ];
         }
 
-        // Atualizar senha
         $user->update([
             'password' => Hash::make($newPassword)
         ]);
 
-        // Invalidar tokens antigos (opcional, mas recomendado)
         $user->tokens()->delete();
 
-        // Limpar códigos de recuperação
         DB::table('password_reset_codes')->where('email', $email)->delete();
 
-        Log::info('🔑 Senha resetada com sucesso', [
+        Log::info(' Senha resetada com sucesso', [
             'user_id' => $user->id,
             'email' => $email,
             'reset_at' => now()
@@ -220,9 +200,7 @@ class PasswordResetService
         ];
     }
 
-    /**
-     * Gera um código único de 6 dígitos
-     */
+  
     private function generateUniqueCode(string $email): string
     {
         do {
@@ -238,16 +216,14 @@ class PasswordResetService
         return $code;
     }
 
-    /**
-     * Envia email com o código
-     */
+   
     private function sendResetEmail(User $user, string $code): bool
     {
         try {
             $appName = config('app.name', 'GoGym');
             $expiresIn = 15;
             
-            $subject = "🔐 Recuperação de Senha - {$appName}";
+            $subject = "Recuperação de Senha - {$appName}";
             $message = "Olá {$user->name},\n\n";
             $message .= "Recebemos uma solicitação para redefinir sua senha na {$appName}.\n\n";
             $message .= "Seu código de recuperação é: **{$code}**\n\n";
@@ -255,7 +231,6 @@ class PasswordResetService
             $message .= "Se você não solicitou a recuperação de senha, ignore este email.\n\n";
             $message .= "Atenciosamente,\nEquipe {$appName}";
             
-            // Enviar email
             Mail::raw($message, function ($mail) use ($user, $subject) {
                 $mail->to($user->email)
                      ->subject($subject);
@@ -264,7 +239,7 @@ class PasswordResetService
             return true;
             
         } catch (\Exception $e) {
-            Log::error('❌ Erro ao enviar email de recuperação', [
+            Log::error('Erro ao enviar email de recuperação', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage()
             ]);
@@ -273,9 +248,8 @@ class PasswordResetService
         }
     }
 
-    /**
-     * Verifica rate limiting
-     */
+    
+
     private function hasTooManyAttempts(User $user): bool
     {
         $recentAttempts = DB::table('password_reset_codes')
@@ -286,9 +260,7 @@ class PasswordResetService
         return $recentAttempts >= 3;
     }
 
-    /**
-     * Verifica status de um código (para frontend)
-     */
+  
     public function checkCodeStatus(string $email, string $code): array
     {
         $record = DB::table('password_reset_codes')

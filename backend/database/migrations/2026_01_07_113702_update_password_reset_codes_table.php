@@ -9,7 +9,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('password_reset_codes', function (Blueprint $table) {
-            // Adicionar colunas se não existirem
             if (!Schema::hasColumn('password_reset_codes', 'token')) {
                 $table->string('token')->nullable()->after('code');
             }

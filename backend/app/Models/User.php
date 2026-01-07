@@ -86,7 +86,7 @@ class User extends Authenticatable
         $this->forceFill([
             'email_verification_code' => $code,
             'email_verification_sent_at' => now(),
-            'email_verification_code_expires_at' => now()->addMinutes(10) // 10 minutos de validade
+            'email_verification_code_expires_at' => now()->addMinutes(10) 
         ])->save();
         
         return $code;
