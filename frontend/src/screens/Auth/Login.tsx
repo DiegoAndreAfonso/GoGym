@@ -9,17 +9,30 @@ import AuthHeader from 'src/components/AuthHeader'
 import { Typography } from 'src/components/Typography'
 import FormButton from '@/components/Form/FormButton'
 import { useTheme } from '@/context/ThemeContext'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import LoginFooter from '@/components/LoginFooter'
-import { lightTheme, darkTheme } from '@/@types/colors'
+import { useNavigation } from '@/hooks/useNavigation'
+import { useFormToast } from '@/hooks/useFormToast'
+import { FormToast } from '@/components/Form/FormToast'
 
 export default function Login() {
-    const theme = darkTheme
+    const navigation = useNavigation();
+    const { theme } = useTheme()
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [rememberMe, setRememberMe] = useState(false)
     const [loading, setLoading] = useState(false)
+    const { success, error, info, warning, toastConfig, visible, hideFormToast } = useFormToast()
 
+
+    useEffect(() => {
+        const params = navigation.getState()?.routes?.[navigation.getState().index]?.params;
+        
+        if (params?.passwordChanged) {
+            success('Senha alterada com sucesso! Você já pode fazer login com sua nova senha.')
+            navigation.setParams({ passwordChanged: false })
+        }
+    }, [navigation])
     const handleLogin = async () => {
         setLoading(true)
         setTimeout(() => {
@@ -29,8 +42,12 @@ export default function Login() {
     }
 
     const handleForgotPassword = () => {
-        console.log('Esqueci a senha')
+        navigation.navigate('ForgotPassword');
     }
+    const handleRegister = () => {
+        navigation.navigate('Register');
+    };
+
 
     return (
         <KeyboardDismissView>
@@ -43,10 +60,22 @@ export default function Login() {
                             <AuthHeader
                                 title="Faça parte dessa comunidade"
                                 theme={theme}
+                                logoType="text"
+                                logoText="GoGym"
                             />
                         </View>
 
                         <View style={styles.form}>
+                            {toastConfig && (
+                                <FormToast
+                                    message={toastConfig.message}
+                                    type={toastConfig.type}
+                                    visible={visible}
+                                    duration={toastConfig.duration}
+                                    position="above-form"
+                                    onHide={hideFormToast}
+                                />
+                            )}
                             <FormInput
                                 label="Email"
                                 placeholder="digite@email.com"
@@ -97,6 +126,7 @@ export default function Login() {
                             <Link
                                 titulo="Cadastrar"
                                 theme={theme}
+                                onPress={handleRegister}
                             />
                         </View>
 
@@ -161,29 +191,29 @@ const styles = StyleSheet.create({
     },
     header: {
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 60,
     },
     form: {
         width: '100%',
         gap: 16,
-        marginBottom: 10,
+        marginBottom: 30,
     },
     buttonContainer: {
         width: '100%',
-        marginTop: 25,
-        marginBottom: 15,
+        marginTop: 20,
+
     },
     registerLink: {
         flexDirection: 'row',
         justifyContent: 'center',
         gap: 8,
-        marginBottom: 0,
+
     },
     dividerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         width: '100%',
-        marginVertical: 5,
+
     },
     dividerLine: {
         flex: 1,
@@ -197,10 +227,10 @@ const styles = StyleSheet.create({
     socialSection: {
         alignItems: 'center',
         width: '100%',
-        marginTop: 10,
+
     },
     socialTitle: {
-        marginBottom: 20,
+        marginBottom: 10,
         textAlign: 'center',
     },
     socialButtonsContainer: {

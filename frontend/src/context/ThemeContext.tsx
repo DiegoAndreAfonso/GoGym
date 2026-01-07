@@ -24,7 +24,7 @@ interface ThemeContextData {
 }
 
 
-const defaultTheme: AppTheme = lightTheme;
+const defaultTheme: AppTheme = darkTheme;
 
 const themes: Record<ThemeType, AppTheme> = {
   light: lightTheme,
@@ -36,7 +36,7 @@ const themes: Record<ThemeType, AppTheme> = {
 
 const ThemeContext = createContext<ThemeContextData>({
   theme: defaultTheme,
-  themeType: 'light',
+  themeType: 'dark',
   toggleTheme: () => { },
 });
 
@@ -53,7 +53,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
   children,
-  initialTheme = 'light',
+  initialTheme = 'dark',
 }) => {
   const [themeType, setThemeType] = useState<ThemeType>(initialTheme);
 

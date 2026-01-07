@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   View,
   StyleSheet,
   Pressable,
   StyleProp,
   ViewStyle,
-  TextInput as RNTextInput
 } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -54,6 +53,7 @@ type FormInputProps = {
   maxLength?: number
   multiline?: boolean
   numberOfLines?: number
+  autoFocus?: boolean 
 }
 
 export default function FormInput({
@@ -81,12 +81,43 @@ export default function FormInput({
   keyboardType = 'default',
   returnKeyType = 'done',
   onSubmitEditing,
+  blurOnSubmit,
   maxLength,
   multiline = false,
   numberOfLines = 1,
+  autoFocus = false, // Valor padrão
 }: FormInputProps) {
   const [hidePassword, setHidePassword] = useState(secureTextEntry)
   const [isFocused, setIsFocused] = useState(false)
+  
+  // Referência para o TextInput
+  const inputRef = useRef<any>(null)
+
+  // Efeito para auto-focus
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      // Pequeno delay para garantir que o componente esteja renderizado
+      const timer = setTimeout(() => {
+        inputRef.current?.focus()
+      }, 100)
+      
+      return () => clearTimeout(timer)
+    }
+  }, [autoFocus])
+
+  // Efeito para re-focar quando o campo recebe foco novamente
+  useEffect(() => {
+    const handleFocus = () => {
+      if (isFocused && inputRef.current) {
+        inputRef.current?.focus()
+      }
+    }
+
+    // Verifica periodicamente se o campo ainda está focado
+    const interval = setInterval(handleFocus, 500)
+    
+    return () => clearInterval(interval)
+  }, [isFocused])
 
   const labelVariant: TextVariant = labelTypography?.variant || 'labelLarge'
   const errorVariant: TextVariant = 'bodySmall'
@@ -252,6 +283,19 @@ export default function FormInput({
     onBlur?.()
   }
 
+  // Função para selecionar todo o texto quando o campo recebe foco
+  const handleFocusWithSelection = () => {
+    handleFocus()
+    // Seleciona todo o texto quando o campo recebe foco
+    setTimeout(() => {
+      if (inputRef.current && value) {
+        inputRef.current.setNativeProps({
+          selection: { start: 0, end: value.length }
+        })
+      }
+    }, 100)
+  }
+
   return (
     <View style={[styles.container, style]} testID={testID}>
       {label && (
@@ -269,6 +313,7 @@ export default function FormInput({
         {renderLeftIcon()}
 
         <TextInput
+          ref={inputRef}
           placeholder={placeholder}
           secureTextEntry={hidePassword}
           style={[
@@ -291,7 +336,7 @@ export default function FormInput({
             },
           }}
           underlineColor="transparent"
-          onFocus={handleFocus}
+          onFocus={handleFocusWithSelection}
           onBlur={handleBlur}
           editable={!disabled}
           error={error}
@@ -302,9 +347,11 @@ export default function FormInput({
           keyboardType={keyboardType}
           returnKeyType={returnKeyType}
           onSubmitEditing={onSubmitEditing}
+          blurOnSubmit={blurOnSubmit}
           maxLength={maxLength}
           multiline={multiline}
           numberOfLines={numberOfLines}
+          autoFocus={autoFocus} // Propriedade nativa do TextInput
         />
 
         {renderRightIcon()}

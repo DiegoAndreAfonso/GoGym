@@ -1,5 +1,12 @@
+// src/components/Form/Link.tsx
 import React from 'react'
-import { Pressable, StyleSheet, StyleProp, TextStyle } from 'react-native'
+import { 
+  Pressable, 
+  StyleSheet, 
+  StyleProp, 
+  TextStyle,
+  GestureResponderEvent 
+} from 'react-native'
 import { AppTheme } from 'src/@types/colors'
 import { Typography } from 'src/components/Typography'
 import { TextVariant, FontStyles } from 'src/@types/typography'
@@ -7,7 +14,7 @@ import { TextVariant, FontStyles } from 'src/@types/typography'
 export type LinkProps = {
   titulo: string
   theme: AppTheme
-  onPress?: () => void
+  onPress?: (event?: GestureResponderEvent) => void // Aceita evento opcional
   typography?: {
     variant?: TextVariant
     fontStyle?: keyof typeof FontStyles
@@ -33,7 +40,7 @@ export default function Link({
 
   return (
     <Pressable
-      onPress={onPress}
+      onPress={onPress} 
       disabled={disabled}
       style={({ pressed }) => [
         styles.container,
