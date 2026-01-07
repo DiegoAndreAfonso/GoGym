@@ -1,7 +1,7 @@
 export type RootStackParamList = {
-  Login:undefined | { passwordChanged?: boolean };
+  Login: undefined | { passwordChanged?: boolean; emailVerified?: boolean };
   Register: undefined;
-  ForgotPassword: undefined;  
+  ForgotPassword: undefined;
 };
 
 declare global {
