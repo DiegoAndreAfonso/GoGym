@@ -18,7 +18,7 @@ class EmailVerificationService
         try {
             $code = $user->generateVerificationCode();
             
-            Log::info('📧 Código de verificação gerado', [
+            Log::info('Código de verificação gerado', [
                 'user_id' => $user->id,
                 'email' => $user->email,
                 'code' => $code
@@ -29,7 +29,7 @@ class EmailVerificationService
             return true;
             
         } catch (\Exception $e) {
-            Log::error('❌ Erro ao enviar código de verificação', [
+            Log::error('Erro ao enviar código de verificação', [
                 'user_id' => $user->id,
                 'error' => $e->getMessage()
             ]);
@@ -75,7 +75,7 @@ class EmailVerificationService
 
         $user->markEmailAsVerified();
         
-        Log::info('✅ Email verificado com sucesso', [
+        Log::info('Email verificado com sucesso', [
             'user_id' => $user->id,
             'email' => $user->email
         ]);

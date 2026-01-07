@@ -7,4 +7,5 @@ Route::prefix('password')->controller(PasswordController::class)->group(function
     Route::post('/forgot', 'sendResetCode');
     Route::post('/verify', 'verifyCode');
     Route::post('/reset', 'resetPassword');
+    Route::post('/check-status', 'checkCodeStatus');
 });
